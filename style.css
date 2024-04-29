@@ -1,0 +1,44 @@
+/*css code here*/
+.containerDiv{
+    margin: auto;
+    margin-top: 2em;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid black;
+
+}
+.mainDiv{
+    
+    text-align: center;
+    border: 1px solid black;
+    background-color: aqua;
+    border-radius: 20%;
+}
+.subDiv{
+    background-color: grey;
+    border-radius: 20%;
+    width: 4em;
+    height: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: move;
+}
+.div16th{
+    background-color: grey;
+    border-radius: 20%;
+    width: 4em;
+    height: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: move;
+}
+[draggable]{
+    user-select: none;
+}
+/*
+body{
+    user-select: none;
+}
