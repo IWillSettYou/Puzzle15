@@ -21,43 +21,35 @@
             if(i != 16){
                 let subdiv = document.createElement("div")
                 subdiv.innerText = i;
-                subdiv.className = "subDiv"
+                subdiv.className = "subDiv draggable"
                 subdiv.draggable = 'true'
+                subdiv.id = `${i}`
 
                 div.appendChild(subdiv)
             }else{
                 let subdiv = document.createElement("div")
-                subdiv.className = "subDiv"
-                subdiv.draggable = 'true'
+                subdiv.className = "draggable freeCube"
+                subdiv.draggable = 'false'
+                subdiv.id = `${i}`
                 div.appendChild(subdiv)
             }
             
             document.getElementById('containerDiv').appendChild(div);  
-        }/*
-        function allowDrop(ev) {
-            ev.preventDefault();
-          }
-          
-          function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-          }
-          
-          function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-          }*/
+        }
+
           document.addEventListener('DOMContentLoaded', (event) => {
 
             var dragSrcEl = null;
             
             function handleDragStart(e) {
+              
               this.style.opacity = '0.4';
               
               dragSrcEl = this;
-          
+              
+              
               e.dataTransfer.effectAllowed = 'move';
-              e.dataTransfer.setData('text/html', this.innerHTML);
+              e.dataTransfer.setData('text/html', JSON.stringify({content: this.innerHTML, class: this.className}));
             }
           
             function handleDragOver(e) {
@@ -83,9 +75,36 @@
                 e.stopPropagation(); // stops the browser from redirecting.
               }
               
+              console.log(this.parentNode.id)
+              console.log(dragSrcEl.id)
+
+              if(Number(dragSrcEl.id) != Number(this.parentNode.id) + 1 
+              && Number(dragSrcEl.id) != Number(this.parentNode.id) - 1
+              && Number(dragSrcEl.id) != Number(this.parentNode.id) + 4
+              && Number(dragSrcEl.id) != Number(this.parentNode.id) - 4){
+                return
+              }
+
+              if(!this.className.includes("freeCube")){
+                return
+              }
+               
+              
+              console.log(this.parentNode.id)
+              console.log(dragSrcEl.id)
+              
               if (dragSrcEl != this) {
-                dragSrcEl.innerHTML = this.innerHTML;
-                this.innerHTML = e.dataTransfer.getData('text/html');
+                //dragSrcEl.innerHTML = this.innerHTML;
+                //this.innerHTML = e.dataTransfer.getData('text/html');
+                let draggedData = JSON.parse(e.dataTransfer.getData('text/html'));
+                
+                let droppedData = {content: this.innerHTML, class: this.className};
+
+                this.innerHTML = draggedData.content;
+                this.className = draggedData.class;
+
+                dragSrcEl.innerHTML = droppedData.content;
+                dragSrcEl.className = droppedData.class;
               }
               
               return false;
@@ -100,7 +119,7 @@
             }
             
             
-            let items = document.querySelectorAll('.mainDiv .subDiv');
+            let items = document.querySelectorAll('.mainDiv .draggable');
             items.forEach(function(item) {
               item.addEventListener('dragstart', handleDragStart, false);
               item.addEventListener('dragenter', handleDragEnter, false);
