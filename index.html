@@ -12,6 +12,8 @@
      
 
      <script>
+      let counterList = []
+      //generating the cubes
          for(let i = 1; i < 17; i++){
             const div = document.createElement('div')
             div.id = i;
@@ -20,7 +22,18 @@
                 
             if(i != 16){
                 let subdiv = document.createElement("div")
-                subdiv.innerText = i;
+
+                //random generating the tiles
+                while(subdiv.innerText == ""){
+                  let newRandom = Math.floor(Math.random() * 15) + 1
+                  if(!counterList.includes(newRandom)){
+                    counterList.push(newRandom)
+                    subdiv.innerText = newRandom;
+                    console.log(newRandom)
+                  }
+                }
+                  
+                
                 subdiv.className = "subDiv draggable"
                 subdiv.draggable = 'true'
                 subdiv.id = `${i}`
@@ -76,7 +89,7 @@
               
               console.log(this.parentNode.id)
               console.log(dragSrcEl.id)
-
+              //making logic
               if(Number(dragSrcEl.id) != Number(this.parentNode.id) + 1 
               && Number(dragSrcEl.id) != Number(this.parentNode.id) - 1
               && Number(dragSrcEl.id) != Number(this.parentNode.id) + 4
@@ -87,11 +100,20 @@
               if(!this.className.includes("freeCube")){
                 return
               }
-               
+              //checking for cross line stuff
+               if(Number(dragSrcEl.id) == 8 && Number(this.parentNode.id) == 9 ||
+                  Number(this.parentNode.id) == 8 && Number(dragSrcEl.id) == 9 ||
+                  Number(dragSrcEl.id) == 4 && Number(this.parentNode.id) == 5 ||
+                  Number(this.parentNode.id) == 4 && Number(dragSrcEl.id) == 5 ||
+                  Number(dragSrcEl.id) == 13 && Number(this.parentNode.id) == 12 ||
+                  Number(this.parentNode.id) == 13 && Number(dragSrcEl.id) == 12 ){
+                return
+               }
               
               console.log(this.parentNode.id)
               console.log(dragSrcEl.id)
               
+              //swapping content on dragEnd
               if (dragSrcEl != this) {
                 //dragSrcEl.innerHTML = this.innerHTML;
                 //this.innerHTML = e.dataTransfer.getData('text/html');
